@@ -22,16 +22,16 @@ class DBHelper:		#Defines the new class with the methods for our MySQL database.
     def add_input(self, data):
         connection = self.connect()
         try:
-            query = "INSERT INTO crimes (description) VALUES ('{}');".format(data)
+            query = "INSERT INTO crimes (description) VALUES (%s);"
             with connection.cursor() as cursor:
-                cursor.execute(query)	#With the MySQL-Command INSERT we add data to our
-                cursor.commit()		#database; here in the description column with the
+                cursor.execute(query, data) #With the MySQL-Command INSERT we add data to our
+                connection.commit()	#database; here in the description column with the
         finally:			#value from the user input.
             connection.close()		#To save our changes in our database we have to commit it.
 
 
     def clear_all(self):
-        connection.self.connect()
+        connection = self.connect()
         try:
             query = "DELETE FROM crimes;"
             with connection.cursor() as cursor:	#With the MySQL-Command DELETE we can delete
