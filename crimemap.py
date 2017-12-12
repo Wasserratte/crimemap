@@ -1,7 +1,13 @@
-from dbhelper import DBHelper
+
 from flask import Flask			#Import libraries
 from flask import render_template
 from flask import request
+import dbconfig
+if dbconfig.test:
+    from mockdbhelper import MockDBHelper as DBHelper
+else:
+    from dbhelper import DBHelper
+
 
 app = Flask(__name__)		#Initializing our application
 DB = DBHelper()			#DB is the instance(object) of the DBHelper
@@ -15,7 +21,7 @@ def home():
         data = None				#database will be grabed and displayed
     return render_template("home.html", data=data)
 
-@app.route("/add", methods=["POST"]		#Function is called, when mainpage /add
+@app.route("/add", methods=["POST"])		#Function is called, when mainpage /add
 def add():					#This function receives the input of the user
     try:					#and put it into the DB-Method to insert
         data = request.form.get("userinput")	#this input into our database
