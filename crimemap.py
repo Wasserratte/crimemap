@@ -21,15 +21,15 @@ def home():
         data = None				#database will be grabed and displayed
     return render_template("home.html", data=data)
 
-@app.route("/add", methods=["POST"])		#Function is called, when mainpage /add
-def add():					#This function receives the input of the user
-    try:					#and put it into the DB-Method to insert
-        data = request.form.get("userinput")	#this input into our database
-        DB.add_input(data)
-    except Exception as e:
-        print e
-    return home()	#Give  the information to the home() function so the new content
-			#of our database will be displayed
+@app.route("/submitcrime", methods=["POST"])		#Function is called, when mainpage /submitcrime
+def submitcrime():					#This function receives the input of the user
+    category = request.form.get("category")             #from the html page and pass it to the 
+    date = request.form.get("date")                     #DBHelper() class to use the add_crime method.
+    latitude = float(request.form.get("latitude"))
+    longitude = float(request.form.get("longitude"))
+    description = request.form.get("description")
+    DB.add_crime(category, date, latitude, longitude, description)  #Calls the home() function to show the result
+    return home()
 
 @app.route("/clear")	#Function is called, when mainpage /clear
 def clear():

@@ -19,15 +19,18 @@ class DBHelper:		#Defines the new class with the methods for our MySQL database.
         finally:			#fetchall() transforms data into a list, so we can
             connection.close()		#display it.
 
-    def add_input(self, data):
+    def add_crime(self, category, date, latitude, longitude, description):
         connection = self.connect()
         try:
-            query = "INSERT INTO crimes (description) VALUES (%s);"
+            query = "INSERT INTO crimes (category, date, latitude, longitude, description) \
+                    VALUES (%s, %s, %s, %s, %s)"
             with connection.cursor() as cursor:
-                cursor.execute(query, data) #With the MySQL-Command INSERT we add data to our
-                connection.commit()	#database; here in the description column with the
-        finally:			#value from the user input.
-            connection.close()		#To save our changes in our database we have to commit it.
+                cursor.execute(query, (category, date, latitude, longitude, description))
+                connection.commit()
+        except Exception as e:
+            print (e)
+        finally:
+            connection.close()
 
 
     def clear_all(self):
