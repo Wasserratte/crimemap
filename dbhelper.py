@@ -27,8 +27,8 @@ class DBHelper:
                     'category': crime[3],                                     #string.
                     'description': crime[4] # As key we use the MySQL-Database-Names; so it is easier to call them
                 }
-                named_crimes.append(named_crime]    #Add the dictionary structure to the empty dictionary
-                return named_crimes #We give the named_crimes dictionary back to the program
+                named_crimes.append(named_crime)    #Add the dictionary structure to the empty dictionary
+            return named_crimes #We give the named_crimes dictionary back to the program
         finally:
             connection.close()
                     
