@@ -13,24 +13,24 @@ class DBHelper:
     def get_all_crimes(self):
         connection = self.connect()		
         try:				
-           query = "SELECT latitude, longitude, date, category, description FROM crimes;"
-           with connection.cursor() as cursor:
-               cursor.execute(query)            #Get all data from the database and store it in query.
+            query = "SELECT latitude, longitude, date, category, description FROM crimes;"
+            with connection.cursor() as cursor:
+                cursor.execute(query)            #Get all data from the database and store it in query.
                                                 #cursor execute it an has now all the data.
             named_crimes = []   #Empty dictionary
 
             for crime in cursor:    #We make a dictionary and store in in the variable named_crime
                 named_crime = {
-                    'latitude': crime[0]
-                    'longitude': crime[1]
+                    'latitude': crime[0],
+                    'longitude': crime[1],
                     'date': datetime.datetime.strftime(crime[2], '%Y-%m-%d'), #We have to convert the time in a
                     'category': crime[3],                                     #string.
                     'description': crime[4] # As key we use the MySQL-Database-Names; so it is easier to call them
                 }
                 named_crimes.append(named_crime]    #Add the dictionary structure to the empty dictionary
                 return named_crimes #We give the named_crimes dictionary back to the program
-            finally:
-                connection.close()
+        finally:
+            connection.close()
                     
             
 
