@@ -1,23 +1,38 @@
 import pymysql
+import datetime
 import dbconfig
 
-class DBHelper:		#Defines the new class with the methods for our MySQL database.
+class DBHelper:		
 
     def connect(self, database="crimemap"):
         return pymysql.connect (host='localhost',
-                  user=dbconfig.db_user,		#Makes the connection to our database.
-                  passwd=dbconfig.db_password,		#Returns the function to the program, so
-                  db=database)				#it is available for the other functions.
+                  user=dbconfig.db_user,		
+                  passwd=dbconfig.db_password,		
+                  db=database)				
 
-    def get_all_inputs(self):
-        connection = self.connect()		#Calls the connect-method to get a connection to our 
-        try:				#database.
-            query = "SELECT description FROM crimes;"
-            with connection.cursor() as cursor:
-                cursor.execute(query)	#Wich SELECT we grab the content in our crime table.
-            return cursor.fetchall()	#In this example only the description column.
-        finally:			#fetchall() transforms data into a list, so we can
-            connection.close()		#display it.
+    def get_all_crimes(self):
+        connection = self.connect()		
+        try:				
+           query = "SELECT latitude, longitude, date, category, description FROM crimes;"
+           with connection.cursor() as cursor:
+               cursor.execute(query)            #Get all data from the database and store it in query.
+                                                #cursor execute it an has now all the data.
+            named_crimes = []   #Empty dictionary
+
+            for crime in cursor:    #We make a dictionary and store in in the variable named_crime
+                named_crime = {
+                    'latitude': crime[0]
+                    'longitude': crime[1]
+                    'date': datetime.datetime.strftime(crime[2], '%Y-%m-%d'), #We have to convert the time in a
+                    'category': crime[3],                                     #string.
+                    'description': crime[4] # As key we use the MySQL-Database-Names; so it is easier to call them
+                }
+                named_crimes.append(named_crime]    #Add the dictionary structure to the empty dictionary
+                return named_crimes #We give the named_crimes dictionary back to the program
+            finally:
+                connection.close()
+                    
+            
 
     def add_crime(self, category, date, latitude, longitude, description):
         connection = self.connect()
@@ -37,8 +52,8 @@ class DBHelper:		#Defines the new class with the methods for our MySQL database.
         connection = self.connect()
         try:
             query = "DELETE FROM crimes;"
-            with connection.cursor() as cursor:	#With the MySQL-Command DELETE we can delete
-                cursor.execute(query)		#data from our database. Here the whole content
-                connection.commit()		#of our table crimes.
+            with connection.cursor() as cursor:	
+                cursor.execute(query)		
+                connection.commit()		
         finally:
             connection.close()

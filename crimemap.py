@@ -1,5 +1,6 @@
 
-from flask import Flask			#Import libraries
+from flask import Flask     #Import libraries
+import json
 from flask import render_template
 from flask import request
 import dbconfig
@@ -12,14 +13,13 @@ else:
 app = Flask(__name__)		#Initializing our application
 DB = DBHelper()			#DB is the instance(object) of the DBHelper
 				#class, which contains the neccessaary methods
+
 @app.route("/")
 def home():
-    try:
-        data = DB.get_all_inputs()
-    except Exception as e:
-        print e					#When the mainpage is called, all datas in the
-        data = None				#database will be grabed and displayed
-    return render_template("home.html", data=data)
+    crimes = DB.get_all_crimes()
+    crimes = json.dumps(crimes) #Convert the dictionary in a string
+    return render_template("home.html", crimes=crimes)
+
 
 @app.route("/submitcrime", methods=["POST"])		#Function is called, when mainpage /submitcrime
 def submitcrime():					#This function receives the input of the user
